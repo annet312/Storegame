@@ -25,9 +25,7 @@ namespace OnlineGameStoreDAL.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new GameConfiguration());
-            modelBuilder.Entity<Game>().HasAlternateKey(g => g.Key); // Can be wrong!!!!
             modelBuilder.ApplyConfiguration(new PublisherConfiguration());
-            modelBuilder.Entity<Publisher>().HasAlternateKey(g => g.Key); // Can be wrong!!!!
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
             modelBuilder.ApplyConfiguration(new GenreConfiguration());
             modelBuilder.Entity<Publisher>().HasAlternateKey(g => g.Name); // Can be wrong!!!!
@@ -38,9 +36,8 @@ namespace OnlineGameStoreDAL.Context
             public void Configure(EntityTypeBuilder<Game> builder)
             {
                 builder.ToTable("Games").HasKey(g => g.Id);
-                builder.Property(p => p.Key).IsRequired().HasMaxLength(50);
-                builder.Property(p => p.Name).IsRequired().HasMaxLength(40);
-                builder.Property(p => p.Description).HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
+                builder.Property(g => g.Name).IsRequired().HasMaxLength(40);
+                builder.Property(g => g.Description).IsRequired().HasMaxLength(200);
             }
         }
         public class PublisherConfiguration : IEntityTypeConfiguration<Publisher>
@@ -48,7 +45,6 @@ namespace OnlineGameStoreDAL.Context
             public void Configure(EntityTypeBuilder<Publisher> builder)
             {
                 builder.ToTable("Publishers").HasKey(g => g.Id);
-                builder.Property(p => p.Key).IsRequired().HasMaxLength(50);
                 builder.Property(p => p.Name).IsRequired().HasMaxLength(40);
             }
         }
